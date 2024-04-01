@@ -1,11 +1,6 @@
 <?php
 session_start();
-$server = "localhost";
-$username = "root";
-$password = "";
-$dbname = "qrcodedb";
-
-$conn = new mysqli($server, $username, $password, $dbname);
+include_once ("config.php");
 ?>
 <html>
 
@@ -19,36 +14,9 @@ $conn = new mysqli($server, $username, $password, $dbname);
 <body>
 
     <div class="container">
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">WebSiteName</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.php">Home</a></li>
-                    <?php
-                    if (isset ($_SESSION["loged"])) {
-                        ?>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 </a>
-                        </li>
-                        <li><a href="user.php">User</a></li>
-                        <?php
-                    }
-                    ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <?php
-                    if (isset ($_SESSION["loged"])) {
-                        echo '<li><a href="logout.php"><span class="glyphicon glyphicon-user"></span> Logout</a></li>';
-                    } else {
-                        echo '<li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>';
-                        echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';
-                    }
-                    ?>
-                </ul>
-            </div>
-        </nav>
+        <?php
+        include_once ("header.php");
+        ?>
 
         <div class="row">
             <div class="col-md-6">
@@ -60,6 +28,19 @@ $conn = new mysqli($server, $username, $password, $dbname);
                 <form action="insert1.php" method="post" class="form-horizontal">
                     <label>SCAN QR CODE</label>
                     <input type="text" name="text" id="text" readonly placeholder="scan qrcode" class="form-control">
+                    <select class="form-control" name="mon_hoc" id="mon_hoc">
+                        <?php
+                        $sql = "select MaMH, Name from mon_hoc";
+                        $query = $conn->query($sql);
+                        while ($row = $query->fetch_assoc()) {
+                            ?>
+                            <option value="<?php echo $row['MaMH'] ?>">
+                                <?php echo $row['Name'] ?>
+                            </option>
+                            <?php
+                        }
+                        ?>
+                    </select>
                 </form>
                 <table class="table table-bordered">
                     <thead>
@@ -69,21 +50,12 @@ $conn = new mysqli($server, $username, $password, $dbname);
                             <td>NAME</td>
                             <td>CLASS</td>
                             <td>TIMEIN</td>
+                            <td>Môn học</td>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $server = "localhost";
-                        $username = "root";
-                        $password = "";
-                        $dbname = "qrcodedb";
-
-                        $conn = new mysqli($server, $username, $password, $dbname);
-
-                        if ($conn->connect_error) {
-                            die ("Connection failed" . $conn->connect_error);
-                        }
-                        $sql = "SELECT ID,STUDENTID,NAME,CLASS,TIMEIN FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
+                        $sql = "SELECT ID,STUDENTID,NAME,CLASS,TIMEIN,MaMH FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>
@@ -102,6 +74,15 @@ $conn = new mysqli($server, $username, $password, $dbname);
                                 </td>
                                 <td>
                                     <?php echo $row['TIMEIN']; ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $sql1 = "SELECT NAME FROM MON_HOC WHERE MAMH='" . $row['MaMH'] . "'";
+                                    $query1 = $conn->query($sql1);
+                                    while ($row1 = $query1->fetch_assoc()) {
+                                        echo $row1['NAME'];
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                             <?php

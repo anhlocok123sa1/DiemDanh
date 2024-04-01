@@ -1,13 +1,6 @@
 <?php
 session_start();
-
-$server = "localhost";
-$username = "root";
-$password = "";
-$dbname = "qrcodedb";
-
-$conn = new mysqli($server, $username, $password, $dbname);
-
+include_once("config.php");
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $tk = $_POST["username"];
     $mk = md5($_POST["password"]);
@@ -15,6 +8,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         select * from user where username = '$tk' and password = '$mk'
     ");
     $count = mysqli_num_rows($rows);
+    if($count == 1 && $tk == 'admin') {
+        $_SESSION["loged"] = $tk;
+        header("location:admin.php");
+    }
     if($count==1){
         $_SESSION["loged"] = $tk;
         header("location:index.php");

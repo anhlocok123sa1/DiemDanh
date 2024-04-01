@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include_once("config.php");
 $showAlert = false;
 $showError = false;
 $exists = false;
@@ -12,13 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Include file which makes the 
     // Database Connection. 
-    $server = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "qrcodedb";
-
-    $conn = new mysqli($server, $username, $password, $dbname);
-
     $username = $_POST["username"];
     $password = $_POST["password"];
     $cpassword = $_POST["cpassword"];
