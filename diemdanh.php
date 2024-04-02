@@ -1,6 +1,9 @@
 <?php
 session_start();
 include_once ("config.php");
+if($_SESSION["loged"] != "admin") {
+    header("location:login.php");
+}
 ?>
 <html>
 
@@ -55,7 +58,7 @@ include_once ("config.php");
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT ID,STUDENTID,NAME,CLASS,TIMEIN,MaMH FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
+                        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>
@@ -70,7 +73,7 @@ include_once ("config.php");
                                     <?php echo $row['NAME']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $row['CLASS']; ?>
+                                    <?php echo $row['ma_lop']; ?>
                                 </td>
                                 <td>
                                     <?php echo $row['TIMEIN']; ?>

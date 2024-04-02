@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once("config.php");
+include_once ("config.php");
 $showAlert = false;
 $showError = false;
 $exists = false;
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $patternclass = "/[D]\d{2}_([T][H]|[X][D]|[T][P])\d{2}/";
     $matchesclass = null;
-    $returnvalclass = preg_match($patternclass,$class,$matchesclass);
+    $returnvalclass = preg_match($patternclass, $class, $matchesclass);
 
     $sql = "Select * from user where username='$username'";
 
@@ -37,27 +37,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // the username is already present 
     // or not in our Database 
     if ($num == 0) {
-        if (empty ($_POST["username"])) {
+        if (empty($_POST["username"])) {
             $nameErr = "Username " . REQUIRED_MSG;
             $showError = $nameErr;
-        } else if (empty ($_POST["password"])) {
+        } else if (empty($_POST["password"])) {
             $passErr = "Password " . REQUIRED_MSG;
             $showError = $passErr;
-        } else if($returnvalname != 1) {
+        } else if ($returnvalname != 1) {
             $showError = 'Mã số sinh viên phải theo mẫu VD: DH52001727';
-        }else if($returnvalclass != 1) {
+        } else if ($returnvalclass != 1) {
             $showError = 'Mã lớp phải theo mẫu VD: D20_TH02';
-        }else if (($password == $cpassword) && $exists == false) {
+        } else if (($password == $cpassword) && $exists == false) {
 
             $hash = md5($password);
 
             // Password Hashing is used here. 
             $sql = "INSERT INTO `user` ( `username`, 
-				`password`, `date`,`STUDENTID`,`NAME`,`CLASS`) VALUES ('$username', 
+				`password`, `date`,`STUDENTID`,`NAME`,`ma_lop`) VALUES ('$username', 
 				'$hash', current_timestamp(),'$mssv','$name','$class')";
 
             $result = mysqli_query($conn, $sql);
-            header("location: index.php");
+            header("location: diemdanh.php");
             if ($result) {
                 $showAlert = true;
             }
@@ -93,45 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
     <?php
-
-    if ($showAlert) {
-
-        echo ' <div class="alert alert-success 
-			alert-dismissible fade show" role="alert"> 
-	
-			<strong>Success!</strong> Your account is 
-			now created and you can login. 
-			<button type="button" class="close"
-				data-dismiss="alert" aria-label="Close"> 
-				<span aria-hidden="true">×</span> 
-			</button> 
-		</div> ';
-    }
-
-    if ($showError) {
-
-        echo ' <div class="alert alert-danger 
-			alert-dismissible fade show" role="alert"> 
-		<strong>Error!</strong> ' . $showError . '
-	
-	<button type="button" class="close"
-			data-dismiss="alert aria-label="Close"> 
-			<span aria-hidden="true">×</span> 
-	</button> 
-	</div> ';
-    }
-
-    if ($exists) {
-        echo ' <div class="alert alert-danger 
-			alert-dismissible fade show" role="alert"> 
-	
-		<strong>Error!</strong> ' . $exists . '
-		<button type="button" class="close"
-			data-dismiss="alert" aria-label="Close"> 
-			<span aria-hidden="true">×</span> 
-		</button> 
-	</div> ';
-    }
+    include_once ("showarlert.php");
 
     ?>
 

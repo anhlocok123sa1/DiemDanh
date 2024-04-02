@@ -29,7 +29,7 @@ include_once ("config.php");
                 </div>
                 <?php
                 $user = $_SESSION["loged"];
-                $sql = "SELECT STUDENTID,NAME,CLASS FROM user WHERE username='$user'";
+                $sql = "SELECT STUDENTID,NAME,ma_lop FROM user WHERE username='$user'";
                 $query = $conn->query($sql);
                 while ($row = $query->fetch_assoc()) {
                     $MSSV = $row["STUDENTID"];
@@ -53,7 +53,7 @@ include_once ("config.php");
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Lớp</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="<?php echo $row['CLASS']; ?>"
+                                    <input class="form-control" type="text" value="<?php echo $row['ma_lop']; ?>"
                                         name="class" id="class" readonly>
                                 </div>
                             </div>

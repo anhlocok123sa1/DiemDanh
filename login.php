@@ -8,13 +8,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         select * from user where username = '$tk' and password = '$mk'
     ");
     $count = mysqli_num_rows($rows);
-    if($count == 1 && $tk == 'admin') {
+    if($count == 1) {
         $_SESSION["loged"] = $tk;
-        header("location:admin.php");
-    }
-    if($count==1){
-        $_SESSION["loged"] = $tk;
-        header("location:index.php");
+        if($_POST['username'] === "admin") {
+            header("location:diemdanh.php");
+        }else {
+            header("location:user.php");
+        }
     }
     else{
         header("location:login.php");

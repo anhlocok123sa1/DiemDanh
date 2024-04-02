@@ -5,9 +5,9 @@ if (isset($_POST["selected"])) {
     $selected = $_POST["selected"];
     $mssv = $_POST["mssv"];
     if($selected == 'All'){
-        $sql = "SELECT ID,STUDENTID,NAME,CLASS,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv'";
+        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv'";
     }else {
-        $sql = "SELECT ID,STUDENTID,NAME,CLASS,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv' and MaMH='$selected'";
+        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv' and MaMH='$selected'";
     }
     $query = $conn->query($sql);
     while ($row = $query->fetch_assoc()) {
@@ -23,7 +23,7 @@ if (isset($_POST["selected"])) {
                 <?php echo $row['NAME']; ?>
             </td>
             <td>
-                <?php echo $row['CLASS']; ?>
+                <?php echo $row['ma_lop']; ?>
             </td>
             <td>
                 <?php echo $row['TIMEIN']; ?>
