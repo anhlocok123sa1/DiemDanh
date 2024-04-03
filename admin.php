@@ -102,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         ?>
                     </tbody>
                 </table>
+
                 <form method="post" action="admin.php">
                     <div class="form-group">
                         <label for="mamh">Mã môn học</label>
@@ -117,6 +118,45 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <input type="submit" class="btn btn-primary" name="AddSubject" value="Thêm">
 
                 </form>
+                <?php
+                // Xử lý lọc dữ liệu theo môn học và lớp
+                if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                    if (isset($_POST['filter'])) {
+                        $mon_hoc = $_POST['mon_hoc'];
+                        $lop = $_POST['lop'];
+
+                        if ($mon_hoc == 'All' && $lop == 'All') {
+                            // Nếu chọn "Tất cả các môn" và "Tất cả các lớp", thực hiện truy vấn ban đầu
+                            $sql = 'SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
+                    FROM user 
+                    JOIN table_attendance ON table_attendance.STUDENTID = user.STUDENTID 
+                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH';
+                        } else {
+                            // Ngược lại, nếu chọn một môn học cụ thể hoặc lớp cụ thể, thêm điều kiện vào truy vấn
+                            $sql = "SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
+                    FROM user 
+                    JOIN table_attendance ON table_attendance.STUDENTID = user.STUDENTID 
+                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH 
+                    WHERE ";
+                            $conditions = [];
+
+                            if ($mon_hoc != 'All') {
+                                $conditions[] = "mon_hoc.MaMH = '$mon_hoc'";
+                            }
+
+                            if ($lop != 'All') {
+                                $conditions[] = "user.ma_lop = '$lop'";
+                            }
+
+                            $sql .= implode(' AND ', $conditions);
+                        }
+
+                        // Thực hiện truy vấn
+                        $result_filtered = mysqli_query($conn, $sql);
+                    }
+                }
+                ?>
+
                 <form method="post" action="admin.php">
                     <div class="form-group">
                         <span>
@@ -169,72 +209,91 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <td>Họ tên</td>
                             <td>Lớp</td>
                             <td>Môn học</td>
+                            <td>Chi tiết</td>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql = 'select user.STUDENTID,user.NAME,user.ma_lop,mon_hoc.Name,mon_hoc.MaMH from user join table_attendance on table_attendance.STUDENTID = user.STUDENTID join mon_hoc on mon_hoc.MaMH = table_attendance.MaMH';
-                        $query = $conn->query($sql);
-                        while ($row = $query->fetch_assoc()) {
-                            ?>
-                            <tr>
-                                <td>
-                                    <?php echo $row['STUDENTID'] ?>
-                                </td>
-                                <td>
-                                    <?php echo $row['NAME'] ?>
-                                </td>
-                                <td>
-                                    <?php echo $row['ma_lop'] ?>
-                                </td>
-                                <td>
-                                    <?php echo $row['Name'] ?>
-                                </td>
-                                <td>
-                                    <form method="post" action="chitiet.php">
-                                        <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID'] ?>">
-                                        <input type="hidden" name="ma_lop" value="<?php echo $row['ma_lop'] ?>">
-                                        <input type="hidden" name="MaMH" value="<?php echo $row['MaMH'] ?>">
-                                        <!-- Button popup -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#exampleModal">
-                                            Hiển thị chi tiết
-                                        </button>
-                                        <!-- Modal popup -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ...
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                        ?>
+                        // Kiểm tra xem đã lọc theo môn học và lớp hay chưa
+                        if (isset($result_filtered) && $result_filtered->num_rows > 0) {
+                            while ($row = $result_filtered->fetch_assoc()) { ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $row['STUDENTID']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['NAME']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['ma_lop']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['monhoc_name']; ?>
+                                    </td>
+                                    <td>
+                                        <form action="chitiet.php" method="post">
+                                            <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
+                                            <?php
+                                            // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
+                                            $sql_ma_mh = "SELECT MaMH FROM table_attendance WHERE STUDENTID = '{$row['STUDENTID']}'";
+                                            $result_ma_mh = $conn->query($sql_ma_mh);
+                                            if ($result_ma_mh->num_rows > 0) {
+                                                $row_ma_mh = $result_ma_mh->fetch_assoc();
+                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['MaMH'] . '">';
+                                            } else {
+                                                echo '<input type="hidden" name="MaMH" value="">';
+                                            }
+                                            ?>
+                                            <button type="submit" class="btn btn-primary">Chi tiết</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php }
+                        } else {
+                            while ($row = $query->fetch_assoc()) { ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $row['STUDENTID']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['NAME']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['ma_lop']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['Name']; ?>
+                                    </td>
+                                    <td>
+                                        <form action="chitiet.php" method="post">
+                                            <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
+                                            <?php
+                                            // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
+                                            $sql_ma_mh = "SELECT MaMH FROM table_attendance WHERE STUDENTID = '{$row['STUDENTID']}'";
+                                            $result_ma_mh = $conn->query($sql_ma_mh);
+                                            if ($result_ma_mh->num_rows > 0) {
+                                                $row_ma_mh = $result_ma_mh->fetch_assoc();
+                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['MaMH'] . '">';
+                                            } else {
+                                                echo '<input type="hidden" name="MaMH" value="">';
+                                            }
+                                            ?>
+                                            <button type="submit" class="btn btn-primary">Chi tiết</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php }
+                        } ?>
                     </tbody>
                 </table>
+
+
+
+
             </div>
         </div>
         <script>
-            
+
         </script>
 </body>
 
