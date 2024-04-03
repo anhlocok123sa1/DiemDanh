@@ -130,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             $sql = 'SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
                     FROM user 
                     JOIN table_attendance ON table_attendance.STUDENTID = user.STUDENTID 
-                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH';
+                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH
+                    GROUP BY monhoc_name';
                         } else {
                             // Ngược lại, nếu chọn một môn học cụ thể hoặc lớp cụ thể, thêm điều kiện vào truy vấn
                             $sql = "SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
@@ -149,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             }
 
                             $sql .= implode(' AND ', $conditions);
+                            $sql = $sql."GROUP BY monhoc_name";
                         }
 
                         // Thực hiện truy vấn
