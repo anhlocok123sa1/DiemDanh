@@ -1,11 +1,8 @@
 <?php
 session_start();
-include_once ("config.php");
-$showAlert = false;
-$showError = false;
-$exists = false;
+include_once ("../config.php");
 if ($_SESSION["loged"] != 'admin') {
-    header('location:diemdanh.php');
+    header('location:admin/diemdanh.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['AddSubject'])) {
@@ -13,48 +10,40 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $tenmh = $_POST['tenmh'];
         if (empty($mamh)) {
             $err = 'Mã môn học is Required';
-            $showError = $err;
         } else if (empty($tenmh)) {
             $err = 'Tên môn học is Required';
-            $showError = $err;
         } else {
-            $sql = "insert into mon_hoc (`MaMH`,`Name`) values('$mamh','$tenmh')";
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-                $showAlert = true;
+            $sql1 = "select * from mon_hoc where MaMH='$mamh'";
+            $rows = mysqli_query($conn, $sql1);
+            $count = mysqli_num_rows($rows);
+            if ($count == 0) {
+                $sql = "insert into mon_hoc (`MaMH`,`Name`) values('$mamh','$tenmh')";
+                $result = mysqli_query($conn, $sql);
+                if ($result) {
+                }
+            } else {
             }
         }
     }
-    // if (isset($_POST["filter"])) {
-    //     $mamh = $_POST['mamh'];
-    //     $lop = $_POST['ma_lop'];
-    //     if ($mamh == 'All' && $lop == 'All') {
-    //         $sql = "select STUDENTID,NAME,ma_lop from user";
-    //         $result = mysqli_query($conn, $sql);
-    //     }
-    // }
 }
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <script type="text/javascript" src="js/adapter.min.js"></script>
-    <script type="text/javascript" src="js/vue.min.js"></script>
-    <script type="text/javascript" src="js/instascan.min.js"></script>
+    <script type="text/javascript" src="../js/adapter.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/instascan.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
 
 <body>
-    <?php
-    include_once ("showarlert.php");
-    ?>
     <div class="container">
         <?php
-        include_once ("header.php");
+        include_once ("../header.php");
         ?>
 
         <div class="row">
@@ -150,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             }
 
                             $sql .= implode(' AND ', $conditions);
-                            $sql = $sql."GROUP BY monhoc_name";
+                            $sql = $sql . "GROUP BY monhoc_name";
                         }
 
                         // Thực hiện truy vấn
@@ -237,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
                                             <?php
                                             // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
-                                            $sql_ma_mh = "SELECT MaMH FROM table_attendance WHERE STUDENTID = '{$row['STUDENTID']}'";
+                                            $sql_ma_mh = "SELECT mon_hoc.MaMH FROM table_attendance join mon_hoc on mon_hoc.MaMH = table_attendance.MaMH WHERE STUDENTID = '{$row['STUDENTID']}' AND mon_hoc.Name = '{$row['monhoc_name']}'";
                                             $result_ma_mh = $conn->query($sql_ma_mh);
                                             if ($result_ma_mh->num_rows > 0) {
                                                 $row_ma_mh = $result_ma_mh->fetch_assoc();
@@ -267,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <?php echo $row['Name']; ?>
                                     </td>
                                     <td>
-                                        <form action="chitiet.php" method="post">
+                                        <form action="admin/chitiet.php" method="post">
                                             <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
                                             <?php
                                             // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
@@ -295,7 +284,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             </div>
         </div>
         <script>
-
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
         </script>
 </body>
 

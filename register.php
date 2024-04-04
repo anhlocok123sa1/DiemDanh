@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				'$hash', current_timestamp(),'$mssv','$name','$class')";
 
             $result = mysqli_query($conn, $sql);
-            header("location: diemdanh.php");
+            header("location: admin/diemdanh.php");
             if ($result) {
                 $showAlert = true;
             }

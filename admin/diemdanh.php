@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once ("config.php");
+include_once ("../config.php");
 if($_SESSION["loged"] != "admin") {
     header("location:login.php");
 }
@@ -8,17 +8,17 @@ if($_SESSION["loged"] != "admin") {
 <html>
 
 <head>
-    <script type="text/javascript" src="js/adapter.min.js"></script>
-    <script type="text/javascript" src="js/vue.min.js"></script>
-    <script type="text/javascript" src="js/instascan.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="../js/adapter.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/instascan.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
 
 <body>
 
     <div class="container">
         <?php
-        include_once ("header.php");
+        include_once ("../header.php");
         ?>
 
         <div class="row">
@@ -28,7 +28,7 @@ if($_SESSION["loged"] != "admin") {
             </div>
 
             <div class="col-md-6">
-                <form action="insert1.php" method="post" class="form-horizontal">
+                <form action="admin/insert1.php" method="post" class="form-horizontal">
                     <label>SCAN QR CODE</label>
                     <input type="text" name="text" id="text" readonly placeholder="scan qrcode" class="form-control">
                     <select class="form-control" name="mon_hoc" id="mon_hoc">

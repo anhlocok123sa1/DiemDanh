@@ -13,7 +13,7 @@ if (isset ($_POST['text'])) {
         $_SESSION['error'] = $conn->error;
     }
 }
-header("location: diemdanh.php");
+header("location: admin/diemdanh.php");
 
 
 $conn->close();

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,6 +44,9 @@
 
 <body>
     <div class="container">
+        <?php
+        include_once ("../header.php");
+        ?>
         <h1>Thông tin chi tiết</h1>
         <table>
             <tr>
@@ -50,8 +57,7 @@
                 <th>Ngày quét</th>
             </tr>
             <?php
-            session_start();
-            include_once ("config.php");
+            include_once ("../config.php");
             // Kiểm tra xem đã nhận dữ liệu POST từ form hay chưa
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Lấy dữ liệu từ form

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once ("config.php");
+include_once ("../config.php");
 if($_SERVER['REQUEST_METHOD']=="POST") {
     $mamh = $_POST['mamh'];
     $sql = "delete from mon_hoc where MaMH = '$mamh'";

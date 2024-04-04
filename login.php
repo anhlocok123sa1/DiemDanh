@@ -11,7 +11,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if($count == 1) {
         $_SESSION["loged"] = $tk;
         if($_POST['username'] === "admin") {
-            header("location:diemdanh.php");
+            header("location:admin/diemdanh.php");
         }else {
             header("location:user.php");
         }
