@@ -33,12 +33,12 @@ if($_SESSION["loged"] != "admin") {
                     <input type="text" name="text" id="text" readonly placeholder="scan qrcode" class="form-control">
                     <select class="form-control" name="mon_hoc" id="mon_hoc">
                         <?php
-                        $sql = "select MaMH, Name from mon_hoc";
+                        $sql = "select ma_mon_hoc, ten_mon_hoc from mon_hoc";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>
-                            <option value="<?php echo $row['MaMH'] ?>">
-                                <?php echo $row['Name'] ?>
+                            <option value="<?php echo $row['ma_mon_hoc'] ?>">
+                                <?php echo $row['ten_mon_hoc'] ?>
                             </option>
                             <?php
                         }
@@ -58,7 +58,7 @@ if($_SESSION["loged"] != "admin") {
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
+                        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>
@@ -67,10 +67,10 @@ if($_SESSION["loged"] != "admin") {
                                     <?php echo $row['ID']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $row['STUDENTID']; ?>
+                                    <?php echo $row['student_id']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $row['NAME']; ?>
+                                    <?php echo $row['ten']; ?>
                                 </td>
                                 <td>
                                     <?php echo $row['ma_lop']; ?>
@@ -80,10 +80,10 @@ if($_SESSION["loged"] != "admin") {
                                 </td>
                                 <td>
                                     <?php
-                                    $sql1 = "SELECT NAME FROM MON_HOC WHERE MAMH='" . $row['MaMH'] . "'";
+                                    $sql1 = "SELECT ten_mon_hoc FROM MON_HOC WHERE ma_mon_hoc='" . $row['ma_mon_hoc'] . "'";
                                     $query1 = $conn->query($sql1);
                                     while ($row1 = $query1->fetch_assoc()) {
-                                        echo $row1['NAME'];
+                                        echo $row1['ten_mon_hoc'];
                                     }
                                     ?>
                                 </td>

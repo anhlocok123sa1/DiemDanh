@@ -29,24 +29,24 @@ include_once ("config.php");
                 </div>
                 <?php
                 $user = $_SESSION["loged"];
-                $sql = "SELECT STUDENTID,NAME,ma_lop FROM user WHERE username='$user'";
+                $sql = "SELECT student_id,ten,ma_lop FROM user WHERE username='$user'";
                 $query = $conn->query($sql);
                 while ($row = $query->fetch_assoc()) {
-                    $MSSV = $row["STUDENTID"];
+                    $MSSV = $row["student_id"];
                     ?>
                     <div class="card-body">
                         <form autocomplete="off" class="form" role="form" action="user.php" method="post">
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">MSSV</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="<?php echo $row['STUDENTID']; ?>"
+                                    <input class="form-control" type="text" value="<?php echo $row['student_id']; ?>"
                                         name="studentid" id="studentid" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Họ tên</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="<?php echo $row['NAME']; ?>" name="name"
+                                    <input class="form-control" type="text" value="<?php echo $row['ten']; ?>" name="name"
                                         id="name" readonly>
                                 </div>
                             </div>
@@ -92,6 +92,11 @@ include_once ("config.php");
             </div><!-- /form user info -->
         </div>
     </div>
+    <script>
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        </script>
 </body>
 
 </html>

@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } else if (empty($tenmh)) {
             $err = 'Tên môn học is Required';
         } else {
-            $sql1 = "select * from mon_hoc where MaMH='$mamh'";
+            $sql1 = "select * from mon_hoc where ma_mon_hoc='$mamh'";
             $rows = mysqli_query($conn, $sql1);
             $count = mysqli_num_rows($rows);
             if ($count == 0) {
-                $sql = "insert into mon_hoc (`MaMH`,`Name`) values('$mamh','$tenmh')";
+                $sql = "insert into mon_hoc (`ma_mon_hoc`,`ten_mon_hoc`) values('$mamh','$tenmh')";
                 $result = mysqli_query($conn, $sql);
                 if ($result) {
                 }
@@ -54,28 +54,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <td>MaMH</td>
+                            <td>Mã môn học</td>
                             <td>Tên Môn Học</td>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "select MaMH, Name from mon_hoc";
+                        $sql = "select ma_mon_hoc, ten_mon_hoc from mon_hoc";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>
                             <tr>
                                 <td>
-                                    <?php echo $row['MaMH'] ?>
+                                    <?php echo $row['ma_mon_hoc'] ?>
                                 </td>
                                 <td>
-                                    <?php echo $row['Name'] ?>
+                                    <?php echo $row['ten_mon_hoc'] ?>
                                 </td>
                                 <td>
                                     <form method="post" action="delete.php">
-                                        <input type="hidden" name="mamh" value="<?php echo $row['MaMH'] ?>">
+                                        <input type="hidden" name="mamh" value="<?php echo $row['ma_mon_hoc'] ?>">
                                         <?php
-                                        $sql1 = "select * from table_attendance where MaMH ='" . $row['MaMH'] . "'";
+                                        $sql1 = "select * from table_attendance where ma_mon_hoc ='" . $row['ma_mon_hoc'] . "'";
                                         $query1 = $conn->query($sql1);
                                         if (mysqli_num_rows($query1) == 0) {
                                             ?>
@@ -116,22 +116,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                         if ($mon_hoc == 'All' && $lop == 'All') {
                             // Nếu chọn "Tất cả các môn" và "Tất cả các lớp", thực hiện truy vấn ban đầu
-                            $sql = 'SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
+                            $sql = 'SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name 
                     FROM user 
-                    JOIN table_attendance ON table_attendance.STUDENTID = user.STUDENTID 
-                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH
+                    JOIN table_attendance ON table_attendance.student_id = user.student_id 
+                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc
                     GROUP BY monhoc_name';
                         } else {
                             // Ngược lại, nếu chọn một môn học cụ thể hoặc lớp cụ thể, thêm điều kiện vào truy vấn
-                            $sql = "SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name 
+                            $sql = "SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name 
                     FROM user 
-                    JOIN table_attendance ON table_attendance.STUDENTID = user.STUDENTID 
-                    JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH 
+                    JOIN table_attendance ON table_attendance.student_id = user.student_id 
+                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc 
                     WHERE ";
                             $conditions = [];
 
                             if ($mon_hoc != 'All') {
-                                $conditions[] = "mon_hoc.MaMH = '$mon_hoc'";
+                                $conditions[] = "mon_hoc.ma_mon_hoc = '$mon_hoc'";
                             }
 
                             if ($lop != 'All') {
@@ -155,12 +155,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <select class="form-control" name="mon_hoc" id="mon_hoc">
                                 <option value="All">Tất cả các môn</option>
                                 <?php
-                                $sql = "select MaMH, Name from mon_hoc";
+                                $sql = "select ma_mon_hoc, ten_mon_hoc from mon_hoc";
                                 $query = $conn->query($sql);
                                 while ($row = $query->fetch_assoc()) {
                                     ?>
-                                    <option value="<?php echo $row['MaMH'] ?>">
-                                        <?php echo $row['Name'] ?>
+                                    <option value="<?php echo $row['ma_mon_hoc'] ?>">
+                                        <?php echo $row['ten_mon_hoc'] ?>
                                     </option>
                                     <?php
                                 }
@@ -210,10 +210,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             while ($row = $result_filtered->fetch_assoc()) { ?>
                                 <tr>
                                     <td>
-                                        <?php echo $row['STUDENTID']; ?>
+                                        <?php echo $row['student_id']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['NAME']; ?>
+                                        <?php echo $row['ten']; ?>
                                     </td>
                                     <td>
                                         <?php echo $row['ma_lop']; ?>
@@ -223,14 +223,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                     </td>
                                     <td>
                                         <form action="chitiet.php" method="post">
-                                            <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
+                                            <input type="hidden" name="student_id" value="<?php echo $row['student_id']; ?>">
                                             <?php
                                             // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
-                                            $sql_ma_mh = "SELECT mon_hoc.MaMH FROM table_attendance join mon_hoc on mon_hoc.MaMH = table_attendance.MaMH WHERE STUDENTID = '{$row['STUDENTID']}' AND mon_hoc.Name = '{$row['monhoc_name']}'";
+                                            $sql_ma_mh = "SELECT mon_hoc.ma_mon_hoc FROM table_attendance join mon_hoc on mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc WHERE student_id = '{$row['student_id']}' AND mon_hoc.ten_mon_hoc = '{$row['monhoc_name']}'";
                                             $result_ma_mh = $conn->query($sql_ma_mh);
                                             if ($result_ma_mh->num_rows > 0) {
                                                 $row_ma_mh = $result_ma_mh->fetch_assoc();
-                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['MaMH'] . '">';
+                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['ma_mon_hoc'] . '">';
                                             } else {
                                                 echo '<input type="hidden" name="MaMH" value="">';
                                             }
@@ -244,10 +244,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             while ($row = $query->fetch_assoc()) { ?>
                                 <tr>
                                     <td>
-                                        <?php echo $row['STUDENTID']; ?>
+                                        <?php echo $row['student_id']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['NAME']; ?>
+                                        <?php echo $row['ten']; ?>
                                     </td>
                                     <td>
                                         <?php echo $row['ma_lop']; ?>
@@ -257,14 +257,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                     </td>
                                     <td>
                                         <form action="admin/chitiet.php" method="post">
-                                            <input type="hidden" name="STUDENTID" value="<?php echo $row['STUDENTID']; ?>">
+                                            <input type="hidden" name="student_id" value="<?php echo $row['student_id']; ?>">
                                             <?php
                                             // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
-                                            $sql_ma_mh = "SELECT MaMH FROM table_attendance WHERE STUDENTID = '{$row['STUDENTID']}'";
+                                            $sql_ma_mh = "SELECT ma_mon_hoc FROM table_attendance WHERE student_id = '{$row['student_id']}'";
                                             $result_ma_mh = $conn->query($sql_ma_mh);
                                             if ($result_ma_mh->num_rows > 0) {
                                                 $row_ma_mh = $result_ma_mh->fetch_assoc();
-                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['MaMH'] . '">';
+                                                echo '<input type="hidden" name="MaMH" value="' . $row_ma_mh['ma_mon_hoc'] . '">';
                                             } else {
                                                 echo '<input type="hidden" name="MaMH" value="">';
                                             }

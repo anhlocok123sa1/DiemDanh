@@ -61,15 +61,15 @@ session_start();
             // Kiểm tra xem đã nhận dữ liệu POST từ form hay chưa
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Lấy dữ liệu từ form
-                $studentID = $_POST["STUDENTID"];
+                $studentID = $_POST["student_id"];
                 $maMH = $_POST["MaMH"];
 
                 // Truy vấn để lấy thông tin chi tiết về sinh viên và môn học từ cơ sở dữ liệu
-                $sql = "SELECT user.STUDENTID, user.NAME, user.ma_lop, mon_hoc.Name AS monhoc_name, table_attendance.TIMEIN
+                $sql = "SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name, table_attendance.TIMEIN
                         FROM user
-                        JOIN table_attendance ON user.STUDENTID = table_attendance.STUDENTID
-                        JOIN mon_hoc ON mon_hoc.MaMH = table_attendance.MaMH
-                        WHERE user.STUDENTID = '$studentID' AND mon_hoc.MaMH = '$maMH'";
+                        JOIN table_attendance ON user.student_id = table_attendance.student_id
+                        JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc
+                        WHERE user.student_id = '$studentID' AND mon_hoc.ma_mon_hoc = '$maMH'";
 
                 // Thực thi truy vấn
                 $result = $conn->query($sql);
@@ -79,8 +79,8 @@ session_start();
                     // Hiển thị dữ liệu
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . $row["STUDENTID"] . "</td>";
-                        echo "<td>" . $row["NAME"] . "</td>";
+                        echo "<td>" . $row["student_id"] . "</td>";
+                        echo "<td>" . $row["ten"] . "</td>";
                         echo "<td>" . $row["ma_lop"] . "</td>";
                         echo "<td>" . $row["monhoc_name"] . "</td>";
                         echo "<td>" . $row["TIMEIN"] . "</td>";

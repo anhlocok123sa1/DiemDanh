@@ -77,7 +77,7 @@ INSERT INTO `mon_hoc` (`Name`, `MaMH`) VALUES
 DROP TABLE IF EXISTS `table_attendance`;
 CREATE TABLE IF NOT EXISTS `table_attendance` (
   `ID` int NOT NULL AUTO_INCREMENT,
-  `STUDENTID` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `student_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `NAME` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `ma_lop` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `TIMEIN` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -85,14 +85,14 @@ CREATE TABLE IF NOT EXISTS `table_attendance` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`),
   KEY `MaMH` (`MaMH`),
-  KEY `STUDENTID` (`STUDENTID`)
+  KEY `student_id` (`student_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `table_attendance`
 --
 
-INSERT INTO `table_attendance` (`ID`, `STUDENTID`, `NAME`, `ma_lop`, `TIMEIN`, `MaMH`) VALUES
+INSERT INTO `table_attendance` (`ID`, `student_id`, `NAME`, `ma_lop`, `TIMEIN`, `MaMH`) VALUES
 (17, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:11', 'CS03042'),
 (18, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:20', 'CS03043'),
 (19, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:26', 'CS03057');
@@ -109,12 +109,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `cpassword` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `date` datetime NOT NULL,
-  `STUDENTID` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `student_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `NAME` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `ma_lop` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`STUDENTID`),
+  PRIMARY KEY (`student_id`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `STUDENTID` (`STUDENTID`),
+  UNIQUE KEY `student_id` (`student_id`),
   KEY `ma_lop` (`ma_lop`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`username`, `password`, `cpassword`, `date`, `STUDENTID`, `NAME`, `ma_lop`) VALUES
+INSERT INTO `user` (`username`, `password`, `cpassword`, `date`, `student_id`, `NAME`, `ma_lop`) VALUES
 ('admin', 'c4ca4238a0b923820dcc509a6f75849b', 'c4ca4238a0b923820dcc509a6f75849b', '2024-04-02 13:10:26', '', '', 'D20_TH02'),
 ('DH52001727', 'c4ca4238a0b923820dcc509a6f75849b', 'c4ca4238a0b923820dcc509a6f75849b', '2024-04-02 13:10:26', 'DH52001727', 'Lê Lâm Tấn Lộc', 'D20_TH02');
 
@@ -149,7 +149,7 @@ ALTER TABLE `user` ADD FULLTEXT KEY `ma_lop_2` (`ma_lop`);
 --
 ALTER TABLE `table_attendance`
   ADD CONSTRAINT `table_attendance_ibfk_1` FOREIGN KEY (`MaMH`) REFERENCES `mon_hoc` (`MaMH`),
-  ADD CONSTRAINT `table_attendance_ibfk_2` FOREIGN KEY (`STUDENTID`) REFERENCES `user` (`STUDENTID`);
+  ADD CONSTRAINT `table_attendance_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `user` (`student_id`);
 
 --
 -- Constraints for table `user`

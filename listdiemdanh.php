@@ -35,13 +35,13 @@ $query = $conn->query($sql);
                 <?php while ($row = $query->fetch_assoc()) { ?>
                     <tr>
                         <td>
-                            <?php echo $row['MaMH']; ?>
+                            <?php echo $row['ma_mon_hoc']; ?>
                         </td>
                         <td>
-                            <?php echo $row['Name']; ?>
+                            <?php echo $row['ten_mon_hoc']; ?>
                         </td>
                         <td>
-                            <a href="listdiemdanh_result.php?MaMH=<?php echo $row['MaMH']; ?>"
+                            <a href="listdiemdanh_result.php?MaMH=<?php echo $row['ma_mon_hoc']; ?>"
                                 class="btn btn-primary">Xem</a>
                         </td>
                     </tr>

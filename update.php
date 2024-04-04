@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $class = $_POST["class"];
 
     // Cập nhật thông tin người dùng trong cơ sở dữ liệu
-    $sql = "UPDATE user SET NAME = '$name', ma_lop = '$class' WHERE STUDENTID = '$studentid'";
+    $sql = "UPDATE user SET ten = '$name', ma_lop = '$class' WHERE student_id = '$studentid'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION["success"] = "Cập nhật thông tin thành công";
     } else {
@@ -22,11 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Lấy thông tin người dùng từ cơ sở dữ liệu để hiển thị trong form
 $user = $_SESSION["loged"];
-$sql = "SELECT STUDENTID, NAME, ma_lop FROM user WHERE username='$user'";
+$sql = "SELECT student_id, ten, ma_lop FROM user WHERE username='$user'";
 $query = $conn->query($sql);
 $row = $query->fetch_assoc();
-$studentid = $row["STUDENTID"];
-$name = $row["NAME"];
+$studentid = $row["student_id"];
+$name = $row["ten"];
 $class = $row["ma_lop"];
 ?>
 
@@ -43,6 +43,9 @@ $class = $row["ma_lop"];
 <body>
 
     <div class="container">
+        <?php
+        include_once("header.php");
+        ?>
         <h2 class="mt-5">Cập nhật thông tin người dùng</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">

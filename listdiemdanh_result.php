@@ -6,7 +6,7 @@ if (isset($_GET['MaMH'])) {
     $MaMH = $_GET['MaMH'];
     
     // Truy vấn để lấy danh sách sinh viên đã điểm danh của môn học có mã là $MaMH
-    $sql = "SELECT * FROM table_attendance WHERE MaMH = '$MaMH'";
+    $sql = "SELECT * FROM table_attendance WHERE ma_mon_hoc = '$MaMH'";
     $query = $conn->query($sql);
 }
 ?>
@@ -28,7 +28,7 @@ if (isset($_GET['MaMH'])) {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>STUDENTID</th>
+                    <th>student_id</th>
                     <th>NAME</th>
                     <th>Lớp</th>
                     <th>Thời gian điểm danh</th>
@@ -38,8 +38,8 @@ if (isset($_GET['MaMH'])) {
                 <?php while ($row = $query->fetch_assoc()) { ?>
                     <tr>
                         <td><?php echo $row['ID']; ?></td>
-                        <td><?php echo $row['STUDENTID']; ?></td>
-                        <td><?php echo $row['NAME']; ?></td>
+                        <td><?php echo $row['student_id']; ?></td>
+                        <td><?php echo $row['ten']; ?></td>
                         <td><?php echo $row['ma_lop']; ?></td>
                         <td><?php echo $row['TIMEIN']; ?></td>
                     </tr>
