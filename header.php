@@ -12,10 +12,15 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="admin.php">admin </a>
                     </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="listdiemdanh.php">Danh sach diem danh </a>
+                    </li>
+
                     <?php
                 } else {
                     ?>
                     <li><a href="user.php">User</a></li>
+                    <li><a href="update.php">Cap nhat thong tin</a></li>
                     <?php
                 }
             }
