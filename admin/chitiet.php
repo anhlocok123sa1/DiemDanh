@@ -65,10 +65,10 @@ session_start();
                 $maMH = $_POST["MaMH"];
 
                 // Truy vấn để lấy thông tin chi tiết về sinh viên và môn học từ cơ sở dữ liệu
-                $sql = "SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name, table_attendance.TIMEIN
+                $sql = "SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name, diem_danh.TIMEIN
                         FROM user
-                        JOIN table_attendance ON user.student_id = table_attendance.student_id
-                        JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc
+                        JOIN diem_danh ON user.student_id = diem_danh.student_id
+                        JOIN mon_hoc ON mon_hoc.ma_mon_hoc = diem_danh.ma_mon_hoc
                         WHERE user.student_id = '$studentID' AND mon_hoc.ma_mon_hoc = '$maMH'";
 
                 // Thực thi truy vấn

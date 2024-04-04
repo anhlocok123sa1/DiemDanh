@@ -5,9 +5,9 @@ if (isset($_POST["selected"])) {
     $selected = $_POST["selected"];
     $mssv = $_POST["mssv"];
     if($selected == 'All'){
-        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM table_attendance WHERE student_id='$mssv'";
+        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM diem_danh WHERE student_id='$mssv'";
     }else {
-        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM table_attendance WHERE student_id='$mssv' and ma_mon_hoc='$selected'";
+        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM diem_danh WHERE student_id='$mssv' and ma_mon_hoc='$selected'";
     }
     $query = $conn->query($sql);
     while ($row = $query->fetch_assoc()) {

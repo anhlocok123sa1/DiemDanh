@@ -71,11 +71,11 @@ INSERT INTO `mon_hoc` (`Name`, `MaMH`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `table_attendance`
+-- Table structure for table `diem_danh`
 --
 
-DROP TABLE IF EXISTS `table_attendance`;
-CREATE TABLE IF NOT EXISTS `table_attendance` (
+DROP TABLE IF EXISTS `diem_danh`;
+CREATE TABLE IF NOT EXISTS `diem_danh` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `student_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `NAME` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -89,10 +89,10 @@ CREATE TABLE IF NOT EXISTS `table_attendance` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `table_attendance`
+-- Dumping data for table `diem_danh`
 --
 
-INSERT INTO `table_attendance` (`ID`, `student_id`, `NAME`, `ma_lop`, `TIMEIN`, `MaMH`) VALUES
+INSERT INTO `diem_danh` (`ID`, `student_id`, `NAME`, `ma_lop`, `TIMEIN`, `MaMH`) VALUES
 (17, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:11', 'CS03042'),
 (18, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:20', 'CS03043'),
 (19, 'DH52001727', 'Le Lam Tan Loc', 'D20_TH02', '2024-04-02 20:18:26', 'CS03057');
@@ -145,9 +145,9 @@ ALTER TABLE `user` ADD FULLTEXT KEY `ma_lop_2` (`ma_lop`);
 --
 
 --
--- Constraints for table `table_attendance`
+-- Constraints for table `diem_danh`
 --
-ALTER TABLE `table_attendance`
+ALTER TABLE `diem_danh`
   ADD CONSTRAINT `table_attendance_ibfk_1` FOREIGN KEY (`MaMH`) REFERENCES `mon_hoc` (`MaMH`),
   ADD CONSTRAINT `table_attendance_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `user` (`student_id`);
 

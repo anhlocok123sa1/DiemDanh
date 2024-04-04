@@ -58,7 +58,7 @@ if($_SESSION["loged"] != "admin") {
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM table_attendance WHERE DATE(TIMEIN)=CURDATE()";
+                        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM diem_danh WHERE DATE(TIMEIN)=CURDATE()";
                         $query = $conn->query($sql);
                         while ($row = $query->fetch_assoc()) {
                             ?>

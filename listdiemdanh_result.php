@@ -6,7 +6,7 @@ if (isset($_GET['MaMH'])) {
     $MaMH = $_GET['MaMH'];
     
     // Truy vấn để lấy danh sách sinh viên đã điểm danh của môn học có mã là $MaMH
-    $sql = "SELECT * FROM table_attendance WHERE ma_mon_hoc = '$MaMH'";
+    $sql = "SELECT * FROM diem_danh WHERE ma_mon_hoc = '$MaMH'";
     $query = $conn->query($sql);
 }
 ?>

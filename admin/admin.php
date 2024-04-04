@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                     <form method="post" action="delete.php">
                                         <input type="hidden" name="mamh" value="<?php echo $row['ma_mon_hoc'] ?>">
                                         <?php
-                                        $sql1 = "select * from table_attendance where ma_mon_hoc ='" . $row['ma_mon_hoc'] . "'";
+                                        $sql1 = "select * from diem_danh where ma_mon_hoc ='" . $row['ma_mon_hoc'] . "'";
                                         $query1 = $conn->query($sql1);
                                         if (mysqli_num_rows($query1) == 0) {
                                             ?>
@@ -118,15 +118,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             // Nếu chọn "Tất cả các môn" và "Tất cả các lớp", thực hiện truy vấn ban đầu
                             $sql = 'SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name 
                     FROM user 
-                    JOIN table_attendance ON table_attendance.student_id = user.student_id 
-                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc
+                    JOIN diem_danh ON diem_danh.student_id = user.student_id 
+                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = diem_danh.ma_mon_hoc
                     GROUP BY monhoc_name';
                         } else {
                             // Ngược lại, nếu chọn một môn học cụ thể hoặc lớp cụ thể, thêm điều kiện vào truy vấn
                             $sql = "SELECT user.student_id, user.ten, user.ma_lop, mon_hoc.ten_mon_hoc AS monhoc_name 
                     FROM user 
-                    JOIN table_attendance ON table_attendance.student_id = user.student_id 
-                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc 
+                    JOIN diem_danh ON diem_danh.student_id = user.student_id 
+                    JOIN mon_hoc ON mon_hoc.ma_mon_hoc = diem_danh.ma_mon_hoc 
                     WHERE ";
                             $conditions = [];
 
@@ -225,8 +225,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <form action="chitiet.php" method="post">
                                             <input type="hidden" name="student_id" value="<?php echo $row['student_id']; ?>">
                                             <?php
-                                            // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
-                                            $sql_ma_mh = "SELECT mon_hoc.ma_mon_hoc FROM table_attendance join mon_hoc on mon_hoc.ma_mon_hoc = table_attendance.ma_mon_hoc WHERE student_id = '{$row['student_id']}' AND mon_hoc.ten_mon_hoc = '{$row['monhoc_name']}'";
+                                            // Truy vấn để lấy giá trị MaMH từ bảng diem_danh
+                                            $sql_ma_mh = "SELECT mon_hoc.ma_mon_hoc FROM diem_danh join mon_hoc on mon_hoc.ma_mon_hoc = diem_danh.ma_mon_hoc WHERE student_id = '{$row['student_id']}' AND mon_hoc.ten_mon_hoc = '{$row['monhoc_name']}'";
                                             $result_ma_mh = $conn->query($sql_ma_mh);
                                             if ($result_ma_mh->num_rows > 0) {
                                                 $row_ma_mh = $result_ma_mh->fetch_assoc();
@@ -259,8 +259,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <form action="admin/chitiet.php" method="post">
                                             <input type="hidden" name="student_id" value="<?php echo $row['student_id']; ?>">
                                             <?php
-                                            // Truy vấn để lấy giá trị MaMH từ bảng table_attendance
-                                            $sql_ma_mh = "SELECT ma_mon_hoc FROM table_attendance WHERE student_id = '{$row['student_id']}'";
+                                            // Truy vấn để lấy giá trị MaMH từ bảng diem_danh
+                                            $sql_ma_mh = "SELECT ma_mon_hoc FROM diem_danh WHERE student_id = '{$row['student_id']}'";
                                             $result_ma_mh = $conn->query($sql_ma_mh);
                                             if ($result_ma_mh->num_rows > 0) {
                                                 $row_ma_mh = $result_ma_mh->fetch_assoc();
