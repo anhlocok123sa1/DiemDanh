@@ -90,57 +90,8 @@ include_once ("config.php");
                 ?>
                 </div>
             </div><!-- /form user info -->
-
-            <select class="form-control" name="mon_hoc" id="mon_hoc">
-                <option value="All">Tất cả các môn</option>
-                <?php
-                $sql = "select MaMH, Name from mon_hoc";
-                $query = $conn->query($sql);
-                while ($row = $query->fetch_assoc()) {
-                    ?>
-                    <option value="<?php echo $row['MaMH'] ?>">
-                        <?php echo $row['Name'] ?>
-                    </option>
-                    <?php
-                }
-                ?>
-            </select>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>STUDENT ID</td>
-                        <td>NAME</td>
-                        <td>CLASS</td>
-                        <td>TIMEIN</td>
-                        <td>Môn học</td>
-                    </tr>
-                </thead>
-                <tbody id="result">
-
-                </tbody>
-            </table>
         </div>
     </div>
-    <script>
-        let selected = document.querySelector('#mon_hoc');
-        let mssv = document.querySelector('#studentid');
-        let result = document.querySelector('#result');
-        selected.addEventListener('change', function () {
-            let value = selected.value
-            $.ajax({
-                type: "POST",  //type of method
-                url: "select-data.php",  //your page
-                data: {
-                    'selected': value,
-                    'mssv': mssv.value
-                },
-                success: function (res) {
-                    result.innerHTML = res;
-                },
-            });
-        })
-    </script>
 </body>
 
 </html>
