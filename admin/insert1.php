@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once("config.php");
+include_once("../config.php");
 
 if (isset ($_POST['text'])) {
     $text = $_POST['text'];
@@ -13,7 +13,7 @@ if (isset ($_POST['text'])) {
         $_SESSION['error'] = $conn->error;
     }
 }
-header("location: admin/diemdanh.php");
+header("location: diemdanh.php");
 
 
 $conn->close();

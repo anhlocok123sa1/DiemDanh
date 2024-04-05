@@ -4,9 +4,11 @@ include_once("config.php");
 
 if (isset($_GET['MaMH'])) {
     $MaMH = $_GET['MaMH'];
+    $tenmh= $_GET['tenmh'];
+    $mssv = $_GET['mssv'];
     
     // Truy vấn để lấy danh sách sinh viên đã điểm danh của môn học có mã là $MaMH
-    $sql = "SELECT * FROM diem_danh WHERE ma_mon_hoc = '$MaMH'";
+    $sql = "SELECT * FROM diem_danh WHERE ma_mon_hoc = '$MaMH' and student_id='$mssv'";
     $query = $conn->query($sql);
 }
 ?>
@@ -23,13 +25,16 @@ if (isset($_GET['MaMH'])) {
 
 <body>
     <div class="container">
-        <h2>Danh sách sinh viên điểm danh của môn học có mã <?php echo $MaMH; ?></h2>
+        <?php
+        include_once("header.php");
+        ?>
+        <h2>Danh sách sinh viên điểm danh của môn <?php echo $tenmh; ?></h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>student_id</th>
-                    <th>NAME</th>
+                    <th>Mã số sinh viên</th>
+                    <th>Họ tên</th>
                     <th>Lớp</th>
                     <th>Thời gian điểm danh</th>
                 </tr>

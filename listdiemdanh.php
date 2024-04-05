@@ -2,8 +2,18 @@
 session_start();
 include_once ("config.php");
 
+$user = $_SESSION["loged"];
+
 // Truy vấn để lấy danh sách các môn học
-$sql = "SELECT * FROM mon_hoc";
+$sql = "
+SELECT mon_hoc.ma_mon_hoc, ten_mon_hoc, user.ten, diem_danh.student_id 
+FROM diem_danh join mon_hoc 
+on mon_hoc.ma_mon_hoc = diem_danh.ma_mon_hoc
+join user
+on user.student_id = diem_danh.student_id
+where username = '$user' AND diem_danh.student_id = user.student_id
+GROUP BY ten_mon_hoc
+";
 $query = $conn->query($sql);
 ?>
 
@@ -41,7 +51,7 @@ $query = $conn->query($sql);
                             <?php echo $row['ten_mon_hoc']; ?>
                         </td>
                         <td>
-                            <a href="listdiemdanh_result.php?MaMH=<?php echo $row['ma_mon_hoc']; ?>"
+                            <a href="listdiemdanh_result.php?MaMH=<?php echo $row['ma_mon_hoc']; ?>&tenmh=<?php echo $row['ten_mon_hoc']; ?>&mssv=<?php echo $row['student_id']; ?>"
                                 class="btn btn-primary">Xem</a>
                         </td>
                     </tr>

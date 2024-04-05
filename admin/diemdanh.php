@@ -2,7 +2,7 @@
 session_start();
 include_once ("../config.php");
 if($_SESSION["loged"] != "admin") {
-    header("location:login.php");
+    header("location:../login.php");
 }
 ?>
 <html>
@@ -28,7 +28,7 @@ if($_SESSION["loged"] != "admin") {
             </div>
 
             <div class="col-md-6">
-                <form action="admin/insert1.php" method="post" class="form-horizontal">
+                <form action="insert1.php" method="post" class="form-horizontal">
                     <label>SCAN QR CODE</label>
                     <input type="text" name="text" id="text" readonly placeholder="scan qrcode" class="form-control">
                     <select class="form-control" name="mon_hoc" id="mon_hoc">
