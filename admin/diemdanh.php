@@ -1,8 +1,14 @@
 <?php
 session_start();
 include_once ("../config.php");
-if($_SESSION["loged"] != "admin") {
+if ($_SESSION["loged"] != "admin") {
     header("location:../login.php");
+}
+// Kiểm tra nếu có thông báo lỗi trong session
+if (isset($_SESSION['error'])) {
+    $error_message = $_SESSION['error'];
+    // Xóa thông báo lỗi trong session để tránh hiển thị lại nếu refresh trang
+    unset($_SESSION['error']);
 }
 ?>
 <html>
@@ -20,6 +26,12 @@ if($_SESSION["loged"] != "admin") {
         <?php
         include_once ("../header.php");
         ?>
+
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error_message; ?>
+            </div>
+        <?php endif; ?>
 
         <div class="row">
             <div class="col-md-6">
@@ -69,16 +81,16 @@ if($_SESSION["loged"] != "admin") {
                                 <td>
                                     <?php echo $row['student_id']; ?>
                                 </td>
-                                <td>
+                                <td class="name">
                                     <?php echo $row['ten']; ?>
                                 </td>
                                 <td>
                                     <?php echo $row['ma_lop']; ?>
                                 </td>
-                                <td>
+                                <td class="time_in">
                                     <?php echo $row['TIMEIN']; ?>
                                 </td>
-                                <td>
+                                <td class="ten_mon_hoc">
                                     <?php
                                     $sql1 = "SELECT ten_mon_hoc FROM MON_HOC WHERE ma_mon_hoc='" . $row['ma_mon_hoc'] . "'";
                                     $query1 = $conn->query($sql1);
@@ -112,6 +124,9 @@ if($_SESSION["loged"] != "admin") {
 
         scanner.addListener('scan', function (c) {
             document.getElementById('text').value = c;
+
+            const scannerValue = c.split('-');
+
             document.forms[0].submit();
             alert('Đã quét');
         });
