@@ -53,11 +53,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Password Hashing is used here. 
             $sql = "INSERT INTO `user` ( `username`, 
-				`password`, `date`,`STUDENTID`,`NAME`,`ma_lop`) VALUES ('$username', 
+				`password`, `date`,`student_id`,`ten`,`ma_lop`) VALUES ('$username', 
 				'$hash', current_timestamp(),'$mssv','$name','$class')";
 
             $result = mysqli_query($conn, $sql);
-            header("location: diemdanh.php");
+            header("location: admin/diemdanh.php");
             if ($result) {
                 $showAlert = true;
             }

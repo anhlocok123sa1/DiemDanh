@@ -1,25 +1,24 @@
 <?php
 session_start();
-include_once("config.php");
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+include_once ("config.php");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tk = $_POST["username"];
     $mk = md5($_POST["password"]);
-    $rows = mysqli_query($conn,"
+    $rows = mysqli_query($conn, "
         select * from user where username = '$tk' and password = '$mk'
     ");
     $count = mysqli_num_rows($rows);
-    if($count == 1) {
+    if ($count == 1) {
         $_SESSION["loged"] = $tk;
-        if($_POST['username'] === "admin") {
-            header("location:diemdanh.php");
-        }else {
+        if ($_POST['username'] === "admin") {
+            header("location:admin/diemdanh.php");
+        } else {
             header("location:user.php");
         }
-    }
-    else{
+    } else {
         header("location:login.php");
     }
-    
+
 }
 ?>
 
@@ -33,14 +32,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, 
         shrink-to-fit=no">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
 </head>
 
 <body>
-
+    <?php
+    include_once ("header.php");
+    ?>
     <div class="container my-4 ">
 
         <h1 class="text-center">Login Here</h1>
@@ -82,4 +87,3 @@ https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
 </body>
 
 </html>
-

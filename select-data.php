@@ -5,9 +5,9 @@ if (isset($_POST["selected"])) {
     $selected = $_POST["selected"];
     $mssv = $_POST["mssv"];
     if($selected == 'All'){
-        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv'";
+        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM diem_danh WHERE student_id='$mssv'";
     }else {
-        $sql = "SELECT ID,STUDENTID,NAME,ma_lop,TIMEIN,MaMH FROM table_attendance WHERE STUDENTID='$mssv' and MaMH='$selected'";
+        $sql = "SELECT ID,student_id,ten,ma_lop,TIMEIN,ma_mon_hoc FROM diem_danh WHERE student_id='$mssv' and ma_mon_hoc='$selected'";
     }
     $query = $conn->query($sql);
     while ($row = $query->fetch_assoc()) {
@@ -17,10 +17,10 @@ if (isset($_POST["selected"])) {
                 <?php echo $row['ID']; ?>
             </td>
             <td>
-                <?php echo $row['STUDENTID']; ?>
+                <?php echo $row['student_id']; ?>
             </td>
             <td>
-                <?php echo $row['NAME']; ?>
+                <?php echo $row['ten']; ?>
             </td>
             <td>
                 <?php echo $row['ma_lop']; ?>
@@ -30,10 +30,10 @@ if (isset($_POST["selected"])) {
             </td>
             <td>
                 <?php
-                $sql1 = "SELECT NAME FROM MON_HOC WHERE MAMH='" . $row['MaMH'] . "'";
+                $sql1 = "SELECT ten_mon_hoc FROM MON_HOC WHERE ma_mon_hoc='" . $row['ma_mon_hoc'] . "'";
                 $query1 = $conn->query($sql1);
                 while ($row1 = $query1->fetch_assoc()) {
-                    echo $row1['NAME'];
+                    echo $row1['ten_mon_hoc'];
                 }
                 ?>
             </td>

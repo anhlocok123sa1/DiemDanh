@@ -29,24 +29,24 @@ include_once ("config.php");
                 </div>
                 <?php
                 $user = $_SESSION["loged"];
-                $sql = "SELECT STUDENTID,NAME,ma_lop FROM user WHERE username='$user'";
+                $sql = "SELECT student_id,ten,ma_lop FROM user WHERE username='$user'";
                 $query = $conn->query($sql);
                 while ($row = $query->fetch_assoc()) {
-                    $MSSV = $row["STUDENTID"];
+                    $MSSV = $row["student_id"];
                     ?>
                     <div class="card-body">
                         <form autocomplete="off" class="form" role="form" action="user.php" method="post">
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">MSSV</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="<?php echo $row['STUDENTID']; ?>"
+                                    <input class="form-control" type="text" value="<?php echo $row['student_id']; ?>"
                                         name="studentid" id="studentid" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Họ tên</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="<?php echo $row['NAME']; ?>" name="name"
+                                    <input class="form-control" type="text" value="<?php echo $row['ten']; ?>" name="name"
                                         id="name" readonly>
                                 </div>
                             </div>
@@ -90,57 +90,13 @@ include_once ("config.php");
                 ?>
                 </div>
             </div><!-- /form user info -->
-
-            <select class="form-control" name="mon_hoc" id="mon_hoc">
-                <option value="All">Tất cả các môn</option>
-                <?php
-                $sql = "select MaMH, Name from mon_hoc";
-                $query = $conn->query($sql);
-                while ($row = $query->fetch_assoc()) {
-                    ?>
-                    <option value="<?php echo $row['MaMH'] ?>">
-                        <?php echo $row['Name'] ?>
-                    </option>
-                    <?php
-                }
-                ?>
-            </select>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>STUDENT ID</td>
-                        <td>NAME</td>
-                        <td>CLASS</td>
-                        <td>TIMEIN</td>
-                        <td>Môn học</td>
-                    </tr>
-                </thead>
-                <tbody id="result">
-
-                </tbody>
-            </table>
         </div>
     </div>
     <script>
-        let selected = document.querySelector('#mon_hoc');
-        let mssv = document.querySelector('#studentid');
-        let result = document.querySelector('#result');
-        selected.addEventListener('change', function () {
-            let value = selected.value
-            $.ajax({
-                type: "POST",  //type of method
-                url: "select-data.php",  //your page
-                data: {
-                    'selected': value,
-                    'mssv': mssv.value
-                },
-                success: function (res) {
-                    result.innerHTML = res;
-                },
-            });
-        })
-    </script>
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        </script>
 </body>
 
 </html>
