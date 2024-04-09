@@ -9,15 +9,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $class = $_POST["class"];
 
-    // Cập nhật thông tin người dùng trong cơ sở dữ liệu
-    $sql = "UPDATE user SET ten = '$name', ma_lop = '$class' WHERE student_id = '$studentid'";
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION["success"] = "Cập nhật thông tin thành công";
+    $sql1 = "select * from lop where ma_lop='$class'";
+    $result1 = mysqli_query($conn, $sql1);
+    $num = mysqli_num_rows($result1);
+    if($num != 0) {
+        // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+        $sql = "UPDATE user SET ten = '$name', ma_lop = '$class' WHERE student_id = '$studentid'";
+        if ($conn->query($sql) === TRUE) {
+            $_SESSION["success"] = "Cập nhật thông tin thành công";
+        } else {
+            $_SESSION["error"] = "Lỗi: " . $conn->error;
+        }
+        header("location: user.php");
+        exit; // Kết thúc việc thực thi script sau khi chuyển hướng
     } else {
-        $_SESSION["error"] = "Lỗi: " . $conn->error;
+        header("location: user.php");
     }
-    header("location: user.php");
-    exit; // Kết thúc việc thực thi script sau khi chuyển hướng
 }
 
 // Lấy thông tin người dùng từ cơ sở dữ liệu để hiển thị trong form

@@ -2,7 +2,7 @@
 session_start();
 include_once ("../config.php");
 if ($_SESSION["loged"] != 'admin') {
-    header('location:admin/diemdanh.php');
+    header('location:../login.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['AddSubject'])) {

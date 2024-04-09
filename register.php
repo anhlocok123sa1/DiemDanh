@@ -2,9 +2,16 @@
 session_start();
 include_once ("config.php");
 $showAlert = false;
-$showError = false;
-$exists = false;
-
+if(isset($_GET['err'])) {
+    $showError = $_GET['err'];
+} else {
+    $showError = false;
+}
+if(isset($_GET['ex'])) {
+    $exists = $_GET['ex'];
+} else {
+    $exists = false;
+}
 $usernameErr = $passErr = "";
 const REQUIRED_MSG = "is required";
 
@@ -13,11 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Include file which makes the 
     // Database Connection. 
     $username = $_POST["username"];
+    $_SESSION["username"] = $_POST["username"];
     $password = $_POST["password"];
     $cpassword = $_POST["cpassword"];
     $mssv = $_POST["mssv"];
+    $_SESSION["mssv"] = $_POST["mssv"];
     $name = ucwords($_POST["name"]);
+    $_SESSION["name"] = $_POST["name"];
     $class = strtoupper($_POST['class']);
+    $_SESSION["class"] = $_POST["class"];
+
 
     $patternname = "/[A-Z][A-Z]\d{8}/";
     $matchesname = null;
@@ -26,6 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $patternclass = "/[D]\d{2}_([T][H]|[X][D]|[T][P])\d{2}/";
     $matchesclass = null;
     $returnvalclass = preg_match($patternclass, $class, $matchesclass);
+
+    $partternkytu = "/[a-zA-Z0-9]/";
+    $matcheskytu = null;
+    $returnvalkytu = preg_match($partternkytu, $password, $matcheskytu);
 
     $sql = "Select * from user where username='$username'";
 
@@ -40,36 +56,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST["username"])) {
             $nameErr = "Username " . REQUIRED_MSG;
             $showError = $nameErr;
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
         } else if (empty($_POST["password"])) {
             $passErr = "Password " . REQUIRED_MSG;
             $showError = $passErr;
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
+        } else if($returnvalkytu != 1) {
+            $showError = "Mat khau khong the chua ky tu dac biet";
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
         } else if ($returnvalname != 1) {
             $showError = 'Mã số sinh viên phải theo mẫu VD: DH52001727';
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
         } else if ($returnvalclass != 1) {
             $showError = 'Mã lớp phải theo mẫu VD: D20_TH02';
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
         } else if (($password == $cpassword) && $exists == false) {
-
             $hash = md5($password);
 
-            // Password Hashing is used here. 
-            $sql = "INSERT INTO `user` ( `username`, 
-				`password`, `date`,`student_id`,`ten`,`ma_lop`) VALUES ('$username', 
-				'$hash', current_timestamp(),'$mssv','$name','$class')";
+            //------------------------------
+            $sql1 = "select * from user where student_id='$mssv'";
+            $result1 = mysqli_query($conn, $sql1);
+            $num1 = mysqli_num_rows($result1);
+            if ($num1 == 0) {
+                //------------------------------
+                // Password Hashing is used here. 
+                $sql = "INSERT INTO `user` ( `username`,`password`,`cpassword`, `date`,`student_id`,`ten`,`ma_lop`) VALUES ('$username','$hash','$hash', current_timestamp(),'$mssv','$name','$class')";
 
-            $result = mysqli_query($conn, $sql);
-            header("location: admin/diemdanh.php");
-            if ($result) {
-                $showAlert = true;
+                $result = mysqli_query($conn, $sql);
+                if ($result) {
+                    header("location:login.php");
+                } else {
+                }
+            } else {
+                $showError = "Ma so sinh vien da ton tai";
+                header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
             }
         } else {
             $showError = "Passwords do not match";
+            header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError");
         }
     }// end if 
 
     if ($num > 0) {
         $exists = "Username not available";
+        header("location:register.php?mssv=$mssv&username=$username&name=$name&class=$class&err=$showError&ex=$exists");
     }
-
+    
 }//end if 
 
 ?>
@@ -104,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" value="<?php if(isset($_GET['username'])) {echo $_GET['username'];} ?>">
                 <span class="error">*
                     <?php echo $usernameErr; ?>
                 </span>
@@ -128,20 +160,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label for="mssv">Mã số sinh viên</label>
-                <input type="text" class="form-control" id="mssv" name="mssv" placeholder="DH52001727">
+                <input type="text" class="form-control" id="mssv" name="mssv" placeholder="DH52001727"
+                value="<?php if(isset($_GET['mssv'])) { echo $_GET['mssv'];}  ?>">
             </div>
 
             <div class="form-group">
                 <label for="name">Họ tên</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Lê Lâm Tấn Lộc">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Lê Lâm Tấn Lộc"
+                value="<?php if(isset($_GET['name'])) {echo $_GET['name'];}  ?>">
             </div>
 
             <div class="form-group">
                 <label for="class">Lớp</label>
-                <input type="text" class="form-control" id="class" name="class" placeholder="D20_TH02">
+                <input type="text" class="form-control" id="class" name="class" placeholder="D20_TH02"
+                value="<?php if(isset($_GET['class'])){echo $_GET['class'];}  ?>">
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" name="submit">
                 SignUp
             </button>
         </form>
